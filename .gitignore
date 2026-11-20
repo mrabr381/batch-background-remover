@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Local run data (regenerated on every run)
+report/
+output/
+cleaned/
+
+# Sample images are GENERATED locally — never committed (binary).
+# Run: python scripts/make_sample.py
+sample_data/*.png
+sample_data/*.jpg
+sample_data/*.jpeg
+sample_data/*.webp
+sample_data/*.bmp
+sample_output/cleaned/
+
+# Model cache lives in ~/.u2net (or ~/.rembg), not in the repo.
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

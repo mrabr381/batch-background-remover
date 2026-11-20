@@ -1,0 +1,59 @@
+[
+  {
+    "width": 600,
+    "height": 600,
+    "total_pixels": 360000,
+    "transparent_pct": 86.1,
+    "semi_transparent_pct": 0.98,
+    "opaque_pct": 12.93,
+    "bbox": [
+      223,
+      76,
+      377,
+      488
+    ],
+    "input": "bottle.png",
+    "output": "bottle_clean.png",
+    "seconds": 7.1,
+    "format": "PNG",
+    "mode": "RGBA"
+  },
+  {
+    "width": 600,
+    "height": 600,
+    "total_pixels": 360000,
+    "transparent_pct": 79.38,
+    "semi_transparent_pct": 1.25,
+    "opaque_pct": 19.38,
+    "bbox": [
+      164,
+      174,
+      486,
+      467
+    ],
+    "input": "mug.png",
+    "output": "mug_clean.png",
+    "seconds": 1.82,
+    "format": "PNG",
+    "mode": "RGBA"
+  },
+  {
+    "width": 600,
+    "height": 600,
+    "total_pixels": 360000,
+    "transparent_pct": 79.45,
+    "semi_transparent_pct": 1.16,
+    "opaque_pct": 19.39,
+    "bbox": [
+      84,
+      245,
+      527,
+      467
+    ],
+    "input": "sneaker.png",
+    "output": "sneaker_clean.png",
+    "seconds": 2.08,
+    "format": "PNG",
+    "mode": "RGBA"
+  }
+]

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Batch Background Remover — Sample Report</title>
+<style>
+  body { font-family: system-ui, -apple-system, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; color: #1a1a1a; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2rem; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #ccc; padding: 0.45rem 0.6rem; text-align: left; font-size: 0.95rem; }
+  th { background: #f2f2f2; }
+  code { background: #f2f2f2; padding: 0.1rem 0.35rem; border-radius: 4px; }
+  pre { background: #f6f6f6; padding: 1rem; overflow-x: auto; border-radius: 6px; }
+  .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+  .shot { border: 1px solid #ddd; border-radius: 8px; padding: 0.75rem; }
+  .shot img { width: 100%; display: block; border-radius: 4px; background: repeating-conic-gradient(#ddd 0% 25%, #fff 0% 50%) 0 0 / 16px 16px; }
+  .missing { background: #fff8e1; border: 1px dashed #c9a227; padding: 1rem; border-radius: 6px; font-size: 0.9rem; }
+  .note { background: #eef6ff; border-left: 4px solid #2b7cd3; padding: 0.75rem 1rem; }
+</style>
+</head>
+<body>
+<h1>✂️ Batch Background Remover — Sample Report</h1>
+<p>Free, local batch background removal with <strong>rembg (U2-Net)</strong>. No upload,
+no per-image fee, no API key. This page shows the real measured results of the
+bundled sample run — 3 product-like images, cleaned on CPU.</p>
+
+<h2>Measured results</h2>
+<p>Transparent % = pixels fully removed (the old background). Edge % = semi-transparent
+edge pixels. A clean cut on a simple product photo is usually under 5% edge.</p>
+<table>
+  <tr><th>Input</th><th>Output</th><th>Size</th><th>Transparent</th><th>Edge</th><th>Opaque (product)</th><th>Time</th></tr>
+  <tr><td>bottle.png</td><td>bottle_clean.png</td><td>600×600</td><td>86.1%</td><td>0.98%</td><td>12.93%</td><td>7.1s*</td></tr>
+  <tr><td>mug.png</td><td>mug_clean.png</td><td>600×600</td><td>79.38%</td><td>1.25%</td><td>19.38%</td><td>1.82s</td></tr>
+  <tr><td>sneaker.png</td><td>sneaker_clean.png</td><td>600×600</td><td>79.45%</td><td>1.16%</td><td>19.39%</td><td>2.08s</td></tr>
+</table>
+<p><small>* First image includes the one-time model load. All four corners of every
+output measure alpha 0 (background fully gone) and every product centre measures
+alpha 254–255 (product fully kept). Full numbers: <a href="stats.json">stats.json</a>
+· <a href="report.md">report.md</a>.</small></p>
+
+<h2>Before / after</h2>
+<div class="shots">
+  <div class="shot"><h3>🫗 Bottle</h3>
+    <img src="../sample_data/bottle.png" alt="Bottle before: green bottle on pale yellow background"
+      onerror="this.outerHTML='<p class=missing>Image not in this repo — sample images are generated locally (they are binary, so they are never committed). Run <code>python scripts/make_sample.py</code> to recreate bottle.png.</p>'">
+    <p>Green bottle on pale yellow → transparent background, 86.1% removed.</p></div>
+  <div class="shot"><h3>☕ Mug</h3>
+    <img src="../sample_data/mug.png" alt="Mug before: red mug on pale blue background"
+      onerror="this.outerHTML='<p class=missing>Image not in this repo — sample images are generated locally (they are binary, so they are never committed). Run <code>python scripts/make_sample.py</code> to recreate mug.png.</p>'">
+    <p>Red mug + handle on pale blue → transparent background, 79.38% removed.</p></div>
+  <div class="shot"><h3>👟 Sneaker</h3>
+    <img src="../sample_data/sneaker.png" alt="Sneaker before: white trainer on pale grey background"
+      onerror="this.outerHTML='<p class=missing>Image not in this repo — sample images are generated locally (they are binary, so they are never committed). Run <code>python scripts/make_sample.py</code> to recreate sneaker.png.</p>'">
+    <p>White trainer on pale grey → transparent background, 79.45% removed.</p></div>
+</div>
+
+<div class="note">
+<h2>Try it yourself</h2>
+<pre>git clone https://github.com/mrabr381/batch-background-remover.git
+cd batch-background-remover
+python -m venv .venv && .venv/bin/pip install -r requirements.txt
+python scripts/make_sample.py          # recreate the 3 sample images
+.venv/bin/python -m bgremove --input sample_data --out clean/</pre>
+<p>First run downloads the U2-Net model once (~176 MB) into <code>~/.u2net</code>;
+after that the tool works fully offline. Or use the web UI:
+<code>streamlit run app.py</code> — upload images, preview before/after, download a ZIP.</p>
+</div>
+
+<p><small>Sample images are simple PIL-drawn product shapes on plain backgrounds —
+not real product photos. They exist to prove the pipeline works and to give you
+measurable numbers; your own photos are the real test. Source:
+<a href="https://github.com/mrabr381/batch-background-remover">github.com/mrabr381/batch-background-remover</a></small></p>
+</body>
+</html>
