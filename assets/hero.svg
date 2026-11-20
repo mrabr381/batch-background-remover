@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Batch Background Remover — remove backgrounds from a whole folder of product photos, free, on your own computer.">
+  <rect width="1200" height="630" fill="#111827"/>
+  <rect x="0" y="0" width="1200" height="8" fill="#f59e0b"/>
+  <circle cx="100" cy="100" r="34" fill="none" stroke="#f59e0b" stroke-width="6"/>
+  <path d="M 78 100 L 96 118 L 126 82" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="600" y="280" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="bold" fill="#ffffff">Batch Background Remover</text>
+  <text x="600" y="350" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="32" fill="#f59e0b">Remove backgrounds from a whole folder of product photos —</text>
+  <text x="600" y="395" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="32" fill="#f59e0b">free, on your own computer, no upload.</text>
+  <text x="600" y="540" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24" fill="#9ca3af">Free &#183; Open source (MIT) &#183; 100% local</text>
+</svg>

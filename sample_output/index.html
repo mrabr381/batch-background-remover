@@ -55,6 +55,19 @@ alpha 254–255 (product fully kept). Full numbers: <a href="stats.json">stats.j
     <p>White trainer on pale grey → transparent background, 79.45% removed.</p></div>
 </div>
 
+<h2>Real photo test — not a drawing</h2>
+<p>A real product photo: a red enamel mug on a plain white background,
+photo by <a href="https://www.pexels.com/photo/red-mug-3961751/">Andreea Ch on Pexels</a>
+(Pexels License — free to use), 1200×800, cleaned on CPU with U2-Net,
+verified 2026-11-20. <strong>95.81% transparent, 0.61% edge, 3.57%
+product kept.</strong> All four corners measure alpha 0; the product
+centre (middle of bounding box [716, 439, 995, 648]) measures alpha 254.
+The photo is a binary JPG, so it is not in this repo — download it and
+reproduce the run:</p>
+<pre>curl -L -o red-mug.jpg "https://images.pexels.com/photos/3961751/pexels-photo-3961751.jpeg?auto=compress&cs=tinysrgb&w=1200"
+python -m bgremove --input folder-with-red-mug.jpg --out clean/</pre>
+<p>Full measured stats: <a href="real_photo_stats.json">real_photo_stats.json</a>.</p>
+
 <div class="note">
 <h2>Try it yourself</h2>
 <pre>git clone https://github.com/mrabr381/batch-background-remover.git
@@ -67,9 +80,9 @@ after that the tool works fully offline. Or use the web UI:
 <code>streamlit run app.py</code> — upload images, preview before/after, download a ZIP.</p>
 </div>
 
-<p><small>Sample images are simple PIL-drawn product shapes on plain backgrounds —
-not real product photos. They exist to prove the pipeline works and to give you
-measurable numbers; your own photos are the real test. Source:
+<p><small>The three images above are simple PIL-drawn product shapes on plain
+backgrounds — the offline test fixture, not the demo. The real-photo test
+above them is a genuine photograph. Source:
 <a href="https://github.com/mrabr381/batch-background-remover">github.com/mrabr381/batch-background-remover</a></small></p>
 </body>
 </html>
