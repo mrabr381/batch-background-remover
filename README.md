@@ -7,6 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![No API key](https://img.shields.io/badge/API%20key-none%20required-brightgreen.svg)](#quickstart)
 [![Runs locally](https://img.shields.io/badge/runs-100%25%20local-informational.svg)](#web-app--how-it-works)
+[![GitHub stars](https://img.shields.io/github/stars/mrabr381/batch-background-remover?style=social)](https://github.com/mrabr381/batch-background-remover)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-muhammadabubakar-FFDD00?logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/muhammadabubakar)
 
 **Remove backgrounds from a whole folder of product photos — free,
 local, no upload, no per-image fee, no API key.** Built on
@@ -14,11 +16,16 @@ local, no upload, no per-image fee, no API key.** Built on
 model) running on your own CPU, with a simple web UI to review
 before/after and download everything as a ZIP.
 
-> **Try it now — web app (1-click deploy):** share.streamlit.io →
-> Create app → repo `mrabr381/batch-background-remover`, branch `main`,
-> file `app.py` → Deploy. No key needed; first run downloads the ~176 MB
-> model. No live demo link yet — Pages is not enabled on this repo. Real
-> numbers below: [sample report page](sample_output/index.html).
+> **Try it now — live in-browser demo:** [mrabr381.github.io/batch-background-remover/demo/](https://mrabr381.github.io/batch-background-remover/demo/) — instant demo on the real red-mug photo with a precomputed mask, plus a live AI option that runs a 44 MB model in your browser (no upload, no key). Full power via the web app (1-click deploy): share.streamlit.io → Create app → repo `mrabr381/batch-background-remover`, branch `main`, file `app.py` → Deploy. No key needed; first run downloads the ~176 MB model. Real numbers below: [sample report page](sample_output/index.html).
+
+![Sample report — measured transparency for the three sample images, before/after cards, and the real-photo test on the red mug (95.81% transparent)](assets/screenshot.png)
+*The sample report — measured results for the three sample images, before/after cards, and the real-photo test (95.81% transparent, 0.61% edge).*
+
+![Screenshot of the demo's red-mug pane: the red mug cut out on a transparent background, threshold 128, with the precomputed-mask stats](demo/screenshot.png)
+*Screenshot — the red-mug pane: cut-out mug on transparency, threshold 128, mask stats (95.78% transparent · 0.7% edge · 3.53% product). The live-AI pane below it is empty until you upload a photo.*
+
+![Short GIF of the demo: moving the threshold slider on the red-mug pane](demo/demo.gif)
+*GIF — moving the threshold slider on the red-mug pane.*
 
 ## Real photo test — the hero result
 

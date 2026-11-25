@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Batch Background Remover — in-browser demo</title>
+<meta name="description" content="Try background removal in your browser: an instant demo on a real product photo with a precomputed mask, and a live AI option that runs a 44 MB segmentation model locally with onnxruntime-web. No upload, no API key.">
+<link rel="icon" href="data:,">
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; max-width: 960px; margin: 0 auto; padding: 1rem 1.25rem 3rem; line-height: 1.5; }
+  h1 { font-size: 1.6rem; margin-bottom: .25rem; }
+  h2 { font-size: 1.2rem; margin-top: 2rem; }
+  .honest { background: #fff8e1; border: 1px solid #e6c200; border-radius: 8px; padding: .75rem 1rem; }
+  @media (prefers-color-scheme: dark) { .honest { background: #3a3000; border-color: #8a7500; } }
+  .pane { border: 1px solid #ccc; border-radius: 10px; padding: 1rem; margin-top: 1rem; }
+  .stage { background: repeating-conic-gradient(#ddd 0% 25%, #fff 0% 50%) 0 0 / 20px 20px; border: 1px solid #999; border-radius: 6px; overflow: hidden; max-width: 100%; }
+  .stage canvas { display: block; width: 100%; height: auto; }
+  .controls { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; align-items: center; margin: .75rem 0; }
+  .controls label { white-space: nowrap; }
+  .stats { font-variant-numeric: tabular-nums; font-size: .95rem; }
+  .status { font-size: .95rem; min-height: 1.4em; }
+  button { padding: .5rem .9rem; font-size: 1rem; cursor: pointer; border-radius: 6px; border: 1px solid #666; background: #f0f0f0; }
+  button:disabled { opacity: .5; cursor: default; }
+  input[type="range"] { width: 180px; vertical-align: middle; }
+  input[type="file"] { max-width: 100%; }
+  .small { font-size: .9rem; color: #555; }
+  .footer-links { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; margin-top: 1.25rem; }
+  .footer-links a { text-decoration: none; }
+  .footer-links img { display: block; }
+  @media (prefers-color-scheme: dark) { .small { color: #aaa; } button { background: #333; color: #eee; border-color: #888; } }
+  code { font-size: .92em; }
+</style>
+</head>
+<body>
+<h1>✂️ Batch Background Remover — in-browser demo</h1>
+<p>Try background removal without installing anything. Two ways, labelled honestly:</p>
+<div class="honest">
+  <strong>1. Instant demo (below, first):</strong> the real red-mug product photo with a
+  <strong>precomputed mask</strong> — made by this repo's own Python CLI (rembg + U2-Net).
+  No model runs in your browser for this photo; you just adjust the threshold and background
+  and see the real result live.<br>
+  <strong>2. Live AI (below, second):</strong> upload your own photo and a real
+  <strong>44&nbsp;MB segmentation model (Silueta)</strong> runs in your browser with
+  onnxruntime-web. Your photo never leaves your computer. First use downloads the model once.
+</div>
+<p class="small">Full power (batch folders, U2-Net 176&nbsp;MB model, alpha matting, reports) lives in the
+<a href="https://github.com/mrabr381/batch-background-remover">Python CLI on GitHub</a>.
+No API key, nothing uploaded, anywhere on this page.</p>
+
+<!-- ======================= 1. PRECOMPUTED MUG DEMO ======================= -->
+<section class="pane" id="mug-pane">
+  <h2>1. Instant demo — red mug, precomputed mask</h2>
+  <p>Real product photo: red enamel mug on white, by
+  <a href="https://www.pexels.com/photo/red-mug-3961751/">Andreea Ch on Pexels</a> (Pexels License).
+  The mask was computed by the Python CLI (U2-Net) and is stored in the repo as text —
+  measured on the full 1200×800 photo: <strong>95.81% transparent · 0.61% edge · 3.57% product kept</strong>,
+  all four corners alpha 0, product centre alpha 254.
+  (<a href="../sample_output/real_photo_stats.json">full stats</a>)</p>
+  <p><button id="mug-load" type="button">Load the red-mug demo</button></p>
+  <div class="stage"><canvas id="mug-canvas" width="600" height="400"></canvas></div>
+  <div class="controls">
+    <label>Threshold <input id="mug-threshold" type="range" min="1" max="254" value="128"> <span id="mug-threshold-val">128</span></label>
+    <span>Background:
+      <label><input type="radio" name="mug-bg" value="transparent" checked> Transparent</label>
+      <label><input type="radio" name="mug-bg" value="white"> White</label>
+      <label><input type="radio" name="mug-bg" value="black"> Black</label>
+      <label><input type="radio" name="mug-bg" value="custom"> Custom <input id="mug-colour" type="color" value="#2563eb"></label>
+    </span>
+    <button id="mug-download" type="button" disabled>Download PNG</button>
+  </div>
+  <p class="stats" id="mug-stats">Press “Load the red-mug demo”.</p>
+  <p class="status" id="mug-status"></p>
+</section>
+
+<!-- ======================= 2. LIVE IN-BROWSER AI ======================= -->
+<section class="pane" id="live-pane">
+  <h2>2. Your photo — live AI in your browser <span class="small">(experimental)</span></h2>
+  <p>This runs the real <strong>Silueta</strong> segmentation model (rembg, 44&nbsp;MB) in your browser
+  via <a href="https://onnxruntime.ai/docs/tutorials/web/">onnxruntime-web 1.20.1</a> (both from CDNs —
+  nothing is installed). The model file is the official rembg release, mirrored on Hugging Face and
+  checksum-verified (md5 <code>55e59e0d8062d2f5d013f4725ee84782</code>). Works best on product shots and
+  people against a plain background; hair, glass and busy backgrounds are hard — same honest limits as the CLI.</p>
+  <p>
+    <input id="live-file" type="file" accept="image/*">
+    <button id="live-use-mug" type="button">Use the red-mug photo</button>
+    <button id="live-run" type="button">Remove background</button>
+  </p>
+  <div class="stage"><canvas id="live-canvas" width="600" height="400"></canvas></div>
+  <div class="controls">
+    <label>Threshold <input id="live-threshold" type="range" min="1" max="254" value="128"> <span id="live-threshold-val">128</span></label>
+    <span>Background:
+      <label><input type="radio" name="live-bg" value="transparent" checked> Transparent</label>
+      <label><input type="radio" name="live-bg" value="white"> White</label>
+      <label><input type="radio" name="live-bg" value="black"> Black</label>
+      <label><input type="radio" name="live-bg" value="custom"> Custom <input id="live-colour" type="color" value="#2563eb"></label>
+    </span>
+    <button id="live-download" type="button" disabled>Download PNG</button>
+  </div>
+  <p class="stats" id="live-stats">Pick a photo, then press “Remove background”.</p>
+  <p class="status" id="live-status"></p>
+  <p class="small">Verification: the model was run on this same mug photo with Python onnxruntime
+  (95.89% transparent · 0.80% edge · 3.31% product) and with onnxruntime-web in Node — the two masks
+  are identical (mean abs. difference 0.000000). Browser execution itself is exercised by this page;
+  if the model fails to start here, the page says so instead of faking a result.</p>
+</section>
+
+<p class="small">Photo: Andreea Ch, Pexels. Model: Silueta via
+<a href="https://github.com/danielgatis/rembg">rembg</a> (MIT). Runtime: onnxruntime-web (MIT).
+Demo is static HTML + JS only — no server, no keys, no uploads. Source:
+<a href="https://github.com/mrabr381/batch-background-remover/tree/main/demo">demo/ in the repo</a>.</p>
+
+<p class="footer-links">
+  <a href="https://github.com/mrabr381/batch-background-remover">⭐ Star on GitHub</a>
+  <a href="https://www.buymeacoffee.com/muhammadabubakar" target="_blank" rel="noopener"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" height="40"></a>
+</p>
+
+<script src="mask-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

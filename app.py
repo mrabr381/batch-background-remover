@@ -41,6 +41,10 @@ with st.sidebar:
     elif bg_choice in ("white", "black"):
         bg_value = bg_choice
 
+    st.sidebar.markdown("---")
+    st.sidebar.link_button("⭐ Star on GitHub", "https://github.com/mrabr381/batch-background-remover")
+    st.sidebar.link_button("☕ Buy me a coffee", "https://www.buymeacoffee.com/muhammadabubakar")
+
 uploads = st.file_uploader(
     "Upload images (PNG / JPG / WebP)",
     type=["png", "jpg", "jpeg", "webp"],
